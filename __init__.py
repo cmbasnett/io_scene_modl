@@ -14,9 +14,8 @@ bl_info = {
 
 if 'bpy' in locals():
     import importlib
-    #if 's3tc'       in locals(): importlib.reload(s3tc)
-    #if 'dxt'        in locals(): importlib.reload(dtx)
-    #if 'abc'        in locals(): importlib.reload(abc)
+    if 'helpers'    in locals(): importlib.reload(helpers)
+    if 'model'        in locals(): importlib.reload(model)
     #if 'builder'    in locals(): importlib.reload(builder)
     if 'reader'     in locals(): importlib.reload(reader)
     #if 'writer'     in locals(): importlib.reload(writer)
@@ -24,9 +23,8 @@ if 'bpy' in locals():
     #if 'exporter'   in locals(): importlib.reload(exporter)
 
 import bpy
-# from . import s3tc
-# from . import dtx
-# from . import abc
+from . import helpers
+from . import model
 # from . import builder
 from . import reader
 # from . import writer
@@ -43,4 +41,3 @@ def unregister():
     bpy.utils.unregister_module(__name__)
     bpy.types.INFO_MT_file_import.remove(importer.ImportOperator.menu_func_import)
     # bpy.types.INFO_MT_file_export.remove(exporter.ExportOperator.menu_func_export)
-
