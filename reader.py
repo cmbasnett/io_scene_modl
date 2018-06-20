@@ -1,10 +1,7 @@
 from .model import *
-from .lta import helper
 from .lta.parser import parse
 from mathutils import Vector, Matrix, Quaternion
 from .helpers import chunks
-
-from pprint import pprint
 
 class AsciiModelReader(object):
 
@@ -16,23 +13,28 @@ class AsciiModelReader(object):
         with open(path, 'rb') as f:
             text = f.read().decode('ascii')
             tree = parse(text)
-            model0 = helper.get_key(tree, 'lt-model-0')
-            shapes = helper.get_keys(model0, 'shape')
+            model0 = tree['lt-model-0']
+            shapes = model0.get_keys('shape')
             for s in shapes:
                 shape = Shape()
                 shape.name = s[1]
-                geometry = helper.get_key(s, 'geometry')
-                mesh = helper.get_key(geometry, 'mesh')
+                geometry = s.geometry
+                mesh = geometry.mesh
                 # Vertices
-                vertices = helper.get_key(mesh, 'vertex')[1]
+                vertices = mesh.vertex[1]
                 shape.vertices = [Vector(map(float, vertex)) for vertex in vertices]
                 # Triangles
-                faces = list(map(int, helper.get_key(mesh, 'tri-fs')[1]))
+                faces = list(map(int, mesh['tri-fs'][1]))
                 shape.faces = list(chunks(faces, 3))
-                shape.material_index = int(helper.get_key(s, 'material-index')[1])
+                shape.material_index = int(s['material-index'][1])
                 # UVs
-                for uvs in helper.get_keys(mesh, 'uvs_\d'):
+                for uvs in mesh.get_keys('uvs_\d'):
                     shape.uvs.append(uvs[1])
-                    pprint(uvs[1])
+                # hierarchy
+                hierarchy = model0.hierarchy
+                children = hierarchy.children
+                print(children)
+                #transform = children.transform
+                # TODO: recursive, it seems?
                 model.shapes.append(shape)
         return model

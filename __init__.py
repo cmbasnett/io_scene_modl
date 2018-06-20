@@ -14,7 +14,7 @@ bl_info = {
 
 if 'bpy' in locals():
     import importlib
-    if 'helpers'    in locals(): importlib.reload(helpers)
+    if 'lta' in locals(): importlib.reload(lta)
     if 'model'        in locals(): importlib.reload(model)
     #if 'builder'    in locals(): importlib.reload(builder)
     if 'reader'     in locals(): importlib.reload(reader)
@@ -23,7 +23,7 @@ if 'bpy' in locals():
     #if 'exporter'   in locals(): importlib.reload(exporter)
 
 import bpy
-from . import helpers
+from . import lta
 from . import model
 # from . import builder
 from . import reader

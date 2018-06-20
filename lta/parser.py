@@ -1,4 +1,5 @@
 from .python_parser import Parser, a, anyof, maybe, skip, someof
+from .node import LTANode
 
 tokens = (
     (r'[a-zA-z0-9-\.]+', 'VALUE'),
@@ -23,7 +24,7 @@ __parser__ = Parser(tokens, grammar)
 def parse(text):
 
     def node(n):
-        return list(map(val, n.items))
+        return LTANode(list(map(val, n.items)))
 
     def val(n):
         i = n.items[0]
@@ -38,4 +39,5 @@ def parse(text):
 
     ast = __parser__.parse('ROOT', text)
     root = ast.items[0]
-    return locals()[root.name.lower()](root)
+    elements = locals()[root.name.lower()](root)
+    return LTANode(elements)
